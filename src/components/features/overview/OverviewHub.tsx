@@ -25,14 +25,14 @@ export const OverviewHub: React.FC = () => {
   const { setActiveTab, selectedModel, setSelectedModel } = useAppState();
 
   const getModelBadge = (id: string) => {
-    if (id === 'model-e1') return 'Active Hero';
-    if (id === 'model-urban') return 'Budget Pivot';
+    if (id === 'aveon-e1') return 'Active Hero';
+    if (id === 'aveon-urban') return 'Budget Pivot';
     return 'Family Pivot';
   };
 
   const getModelBadgeVariant = (id: string) => {
-    if (id === 'model-e1') return 'emerald';
-    if (id === 'model-urban') return 'amber';
+    if (id === 'aveon-e1') return 'emerald';
+    if (id === 'aveon-urban') return 'amber';
     return 'violet';
   };
 

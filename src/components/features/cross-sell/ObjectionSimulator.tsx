@@ -88,7 +88,7 @@ export const ObjectionSimulator: React.FC<ObjectionSimulatorProps> = ({
     return { text: replyText, state: decidedState };
   };
 
-  const triggerObjection = (text: string, type: 'budget' | 'size' | 'feature') => {
+  const triggerObjection = async (text: string, type: 'budget' | 'size' | 'feature') => {
     if (isSpeaking) return; // Prevent double trigger
 
     const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -96,25 +96,90 @@ export const ObjectionSimulator: React.FC<ObjectionSimulatorProps> = ({
     
     setMessages(prev => [...prev, userMsg]);
     setObjectionCount(prev => prev + 1);
-
-    // Run simulated agent speech delay
     setIsSpeaking(true);
 
-    setTimeout(() => {
-      const { text: replyText, state: decidedState } = getAgentReply(text, type);
-      const agentMsg: Message = { 
-        sender: 'agent', 
-        text: replyText, 
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-        state: decidedState
-      };
+    // 1. Determine local state routing & fallback text
+    const e1 = getCarSpec('aveon-e1');
+    const urban = getCarSpec('aveon-urban');
 
+    let decidedState: 'idle' | 'reframe' | 'pivot' | 'hold' = 'hold';
+    let localFallbackText = '';
+    let updatedReframeCount = reframeCount;
+
+    if (type === 'feature') {
+      decidedState = 'hold';
+      localFallbackText = `Iska range dekhiye... certified range ${e1.range} hai, par real-world driving mein... matlab 400 km tak aaram se mil jata hai single charge par.`;
+    } else if (type === 'size') {
+      decidedState = 'pivot';
+      localFallbackText = `Sahi baat hai, E1 SUV spacious hai. Par agar aapko city driving ke liye compact size chahiye na, toh basically humara compact hatchback Aveon Urban model best rahega, jo ${urban.price} se shuru hota hai aur iski size bohot hi comfortable hai.`;
+    } else if (type === 'budget') {
+      if (reframeCount === 0) {
+        decidedState = 'reframe';
+        localFallbackText = `Arey sir, iska upfront price dekhiye... matlab thoda premium hai par running cost petrol car se bohot kam hai, bas ₹1.20 per km padta hai. Plus electric vehicle par zero battery maintenance hai.`;
+        updatedReframeCount = reframeCount + 1;
+        setReframeCount(updatedReframeCount);
+      } else {
+        decidedState = 'pivot';
+        localFallbackText = `Acha dekhiye, agar E1 budget se upar ja raha hai, toh basically humara compact city commuter, Aveon Urban dekh sakte hain. Iska price range ${urban.price} hai aur isme features bohot badhiya hain.`;
+      }
+    }
+
+    // 2. Build Rohan System Prompt based on the state machine constraint
+    const systemPrompt = `You are Rohan, a helpful, friendly voice sales agent at Aveon Motors speaking Hinglish.
+You are pitching the Aveon E1 SUV (Price: ${e1.price}, Range: ${e1.range}, Battery: 60 kWh LFP Pack, Charging: 28 mins DC fast).
+Current Conversation State: ${decidedState.toUpperCase()}
+Objection Category: ${type.toUpperCase()}
+
+INSTRUCTIONS:
+1. Speak in a highly natural, warm Hinglish dialect.
+2. Blend in conversational disfluency oral filler words (e.g., 'Haan toh...', 'Acha dekhiye...', 'Matlab...', 'Basically...') and brief pauses.
+3. Keep the response short (under 3 sentences, maximum 45 words) as this is for a voice call stream.
+4. Do NOT use any bullet points, list formats, asterisks, or markdown. Output raw spoken text only.
+5. If state is REFRAME, defend Aveon E1 using value reframing (running cost is ₹1.20/km, zero battery maintenance). Do NOT suggest other cars.
+6. If state is PIVOT, politely redirect and pitch the Aveon Urban Hatchback (Price: ${urban.price}, Range: 315 km Certified, fits small parking spots, regenerative braking).
+7. If state is HOLD, answer the spec query directly and politely.`;
+
+    try {
+      const response = await fetch('/api/groq', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          systemPrompt,
+          userMessage: text,
+          conversationHistory: messages,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok || !data.reply) {
+        throw new Error("Invalid response");
+      }
+
+      const agentMsg: Message = {
+        sender: 'agent',
+        text: data.reply,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        state: decidedState,
+      };
       setMessages(prev => [...prev, agentMsg]);
       setIsSpeaking(false);
+      onStateUpdate(decidedState, type, updatedReframeCount);
 
-      // Notify flowchart matrix
-      onStateUpdate(decidedState, type, reframeCount + (decidedState === 'reframe' ? 1 : 0));
-    }, 1200);
+    } catch (err) {
+      console.warn("Groq API error, using local fallback response", err);
+      // Timeout simulation for fallback to feel natural
+      setTimeout(() => {
+        const agentMsg: Message = {
+          sender: 'agent',
+          text: localFallbackText,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+          state: decidedState,
+        };
+        setMessages(prev => [...prev, agentMsg]);
+        setIsSpeaking(false);
+        onStateUpdate(decidedState, type, updatedReframeCount);
+      }, 800);
+    }
   };
 
   return (

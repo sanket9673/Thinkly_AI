@@ -120,67 +120,133 @@ export const LiveCallStudio: React.FC = () => {
     setTimeline(prev => [...prev, { sender: 'system', text: 'Call disconnected by operator.', time: formatDuration(duration) }]);
   };
 
+  // Helper to fetch dynamic LLM response from Groq API with robust fallback
+  const getLiveAgentResponse = async (
+    userText: string,
+    stateForPrompt: string,
+    fallbackText: string
+  ): Promise<string> => {
+    const systemPrompt = `You are Priya, a polite and warm female sales advisor at Aveon Motors showroom speaking Hinglish.
+You are talking to Rahul Sharma (+91 98765-43210).
+We are presenting the Aveon E1 SUV (Price: ₹18.99L - ₹24.99L, Range: 480km certified, 400km real, 60 kWh LFP, 28 mins fast charging).
+Current Call State: ${stateForPrompt}
+
+INSTRUCTIONS:
+1. Speak in a highly natural, warm Hinglish dialect.
+2. Blend in conversational disfluency oral filler words (e.g., 'Haan toh...', 'Acha dekhiye...', 'Matlab...', 'Basically...') and brief pauses.
+3. Keep the response short (under 3 sentences, maximum 40 words) as this is for a voice call.
+4. Do NOT use any bullet points, list formats, asterisks, or markdown. Output raw spoken text only.
+5. Under state 'OBJECTION_REFRAME', explain E1 value: running cost is ₹1.20/km, zero battery maintenance. Do NOT suggest other cars yet.
+6. Under state 'CROSS_SELL_PIVOT', pitch the Aveon Urban Hatchback (Price: ₹11.49L - ₹14.29L, Range: 315km, fits city parking).
+7. Under state 'BOOKING_CONFIRMATION', book a test drive slot for tomorrow morning at 11 AM and confirm details.
+8. If the user interrupts or asks a spec question, answer clearly and concisely.`;
+
+    try {
+      const response = await fetch('/api/groq', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          systemPrompt,
+          userMessage: userText,
+          conversationHistory: timeline.map(item => ({
+            sender: item.sender,
+            text: item.text,
+          })),
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok || !data.reply) {
+        throw new Error("API call failed");
+      }
+      return data.reply;
+    } catch (e) {
+      console.warn("Groq API failed in Live Simulator, using local fallback response", e);
+      return fallbackText;
+    }
+  };
+
   // 1. Simulate User Interruption (Barge-in test)
-  const triggerInterruption = () => {
+  const triggerInterruption = async () => {
     if (callStatus !== 'CONNECTED') return;
     
     // Stop any pending agent speech
     if (playbackTimeoutRef.current) clearTimeout(playbackTimeoutRef.current);
     
     setSpeakerState('user');
+    const userText = 'Arey wait wait, main already ek electric vehicle own karta hoon!';
+    const currentDuration = formatDuration(duration);
     setTimeline(prev => [
       ...prev,
-      { sender: 'user', text: 'Arey wait wait, main already ek electric vehicle own karta hoon!', time: formatDuration(duration) }
+      { sender: 'user', text: userText, time: currentDuration }
     ]);
 
-    // Agent barge-in response within 400ms
-    playbackTimeoutRef.current = setTimeout(() => {
+    // Agent barge-in response within 400ms VAD detection
+    playbackTimeoutRef.current = setTimeout(async () => {
       setSpeakerState('agent');
       setCallState('VALUE_PROPOSITION');
       setTurnCount(prev => prev + 1);
+
+      const reply = await getLiveAgentResponse(
+        userText,
+        'VALUE_PROPOSITION',
+        'Oh, acha! (pauses) Arey bohot badhiya sir! Aap abhi kaunsi EV chala rahe hain?'
+      );
+
       setTimeline(prev => [
         ...prev,
-        { sender: 'agent', text: 'Oh, acha! (pauses) Arey bohot badhiya sir! Aap abhi kaunsi EV chala rahe hain?', time: formatDuration(duration) }
+        { sender: 'agent', text: reply, time: formatDuration(duration) }
       ]);
       
       playbackTimeoutRef.current = setTimeout(() => {
         setSpeakerState('idle');
-      }, 3000);
+      }, 3500);
     }, 400);
   };
 
   // 2. Simulate Budget Objection
-  const triggerObjection = () => {
+  const triggerObjection = async () => {
     if (callStatus !== 'CONNECTED') return;
 
     if (playbackTimeoutRef.current) clearTimeout(playbackTimeoutRef.current);
 
     setSpeakerState('user');
+    const userText = 'Mujhe Aveon E1 toh pasand hai, par iska price aur maintenance bohot high lag raha hai.';
+    const currentDuration = formatDuration(duration);
     setTimeline(prev => [
       ...prev,
-      { sender: 'user', text: 'Mujhe Aveon E1 toh pasand hai, par iska price aur maintenance bohot high lag raha hai.', time: formatDuration(duration) }
+      { sender: 'user', text: userText, time: currentDuration }
     ]);
 
-    // Process reframe vs cross-sell based on objection count
-    playbackTimeoutRef.current = setTimeout(() => {
+    const nextCount = objectionCount + 1;
+    setObjectionCount(nextCount);
+
+    // Dynamic processing delayed by 800ms to feel natural
+    playbackTimeoutRef.current = setTimeout(async () => {
       setSpeakerState('agent');
       setTurnCount(prev => prev + 1);
-      const nextCount = objectionCount + 1;
-      setObjectionCount(nextCount);
 
       if (nextCount === 1) {
-        // Run Primary value reframe
         setCallState('OBJECTION_REFRAME');
+        const reply = await getLiveAgentResponse(
+          userText,
+          'OBJECTION_REFRAME',
+          'I understand, Rahul ji. Par ₹18.99 Lakhs ex-showroom price hone par bhi, iska certified running cost sirf ₹1.20 per km padta hai. Yeh regular petrol car se kaafi sasta hai.'
+        );
         setTimeline(prev => [
           ...prev,
-          { sender: 'agent', text: 'I understand, Rahul ji. Par ₹18.99 Lakhs ex-showroom price hone par bhi, iska certified running cost sirf ₹1.20 per km padta hai. Yeh regular petrol car se kaafi sasta hai.', time: formatDuration(duration) }
+          { sender: 'agent', text: reply, time: formatDuration(duration) }
         ]);
       } else {
-        // Run Cross-sell pivot to compact budget
         setCallState('CROSS_SELL_PIVOT');
+        const reply = await getLiveAgentResponse(
+          userText,
+          'CROSS_SELL_PIVOT',
+          'Acha, agar budget abhi priority hai toh humare paas Aveon Urban compact model bhi hai under ₹11.49 Lakhs ex-showroom. Kya iska specs share karoon?'
+        );
         setTimeline(prev => [
           ...prev,
-          { sender: 'agent', text: 'Acha, agar budget abhi priority hai toh humare paas Aveon Urban compact model bhi hai under ₹11.49 Lakhs ex-showroom. Kya iska specs share karoon?', time: formatDuration(duration) }
+          { sender: 'agent', text: reply, time: formatDuration(duration) }
         ]);
       }
 
@@ -191,23 +257,32 @@ export const LiveCallStudio: React.FC = () => {
   };
 
   // 3. Ask Spec Question (Charging)
-  const triggerSpecQuestion = () => {
+  const triggerSpecQuestion = async () => {
     if (callStatus !== 'CONNECTED') return;
 
     if (playbackTimeoutRef.current) clearTimeout(playbackTimeoutRef.current);
 
     setSpeakerState('user');
+    const userText = 'Iska charging time kitna lagta hai full hone mein?';
+    const currentDuration = formatDuration(duration);
     setTimeline(prev => [
       ...prev,
-      { sender: 'user', text: 'Iska charging time kitna lagta hai full hone mein?', time: formatDuration(duration) }
+      { sender: 'user', text: userText, time: currentDuration }
     ]);
 
-    playbackTimeoutRef.current = setTimeout(() => {
+    playbackTimeoutRef.current = setTimeout(async () => {
       setSpeakerState('agent');
       setTurnCount(prev => prev + 1);
+
+      const reply = await getLiveAgentResponse(
+        userText,
+        'GENERAL_SPECS',
+        'Aveon E1 ko regular DC fast charger se charge hone mein lagbhag 45 minutes lagte hain zero se eighty percent tak.'
+      );
+
       setTimeline(prev => [
         ...prev,
-        { sender: 'agent', text: 'Aveon E1 ko regular DC fast charger se charge hone mein lagbhag 45 minutes lagte hain zero se eighty percent tak.', time: formatDuration(duration) }
+        { sender: 'agent', text: reply, time: formatDuration(duration) }
       ]);
 
       playbackTimeoutRef.current = setTimeout(() => {
@@ -217,24 +292,33 @@ export const LiveCallStudio: React.FC = () => {
   };
 
   // 4. Booking Close Trigger
-  const triggerBookingClose = () => {
+  const triggerBookingClose = async () => {
     if (callStatus !== 'CONNECTED') return;
 
     if (playbackTimeoutRef.current) clearTimeout(playbackTimeoutRef.current);
 
     setSpeakerState('user');
+    const userText = 'Thik hai, main test drive lena chahunga.';
+    const currentDuration = formatDuration(duration);
     setTimeline(prev => [
       ...prev,
-      { sender: 'user', text: 'Thik hai, main test drive lena chahunga.', time: formatDuration(duration) }
+      { sender: 'user', text: userText, time: currentDuration }
     ]);
 
-    playbackTimeoutRef.current = setTimeout(() => {
+    playbackTimeoutRef.current = setTimeout(async () => {
       setSpeakerState('agent');
       setCallState('BOOKING_CONFIRMATION');
       setTurnCount(prev => prev + 1);
+
+      const reply = await getLiveAgentResponse(
+        userText,
+        'BOOKING_CONFIRMATION',
+        'Bohot badhiya sir! Main kal subah 11 baje ka showroom test drive slot book kar deti hoon. Aapko exact WhatsApp location bhej di hai.'
+      );
+
       setTimeline(prev => [
         ...prev,
-        { sender: 'agent', text: 'Bohot badhiya sir! Main kal subah 11 baje ka showroom test drive slot book kar deti hoon. Aapko exact WhatsApp location bhej di hai.', time: formatDuration(duration) }
+        { sender: 'agent', text: reply, time: formatDuration(duration) }
       ]);
 
       playbackTimeoutRef.current = setTimeout(() => {
