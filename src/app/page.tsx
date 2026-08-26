@@ -6,6 +6,7 @@ import { useAppState } from '@/context/AppStateContext';
 import { OverviewHub } from '@/components/features/overview/OverviewHub';
 import { PromptTemplatizer } from '@/components/features/templatizer/PromptTemplatizer';
 import { CrossSellStudio } from '@/components/features/cross-sell/CrossSellStudio';
+import { MissingBlocksStudio } from '@/components/features/missing-blocks/MissingBlocksStudio';
 
 export default function HomePage() {
   const { activeTab } = useAppState();
@@ -15,7 +16,8 @@ export default function HomePage() {
       {activeTab === 'overview' && <OverviewHub />}
       {activeTab === 'templatizer' && <PromptTemplatizer />}
       {activeTab === 'cross-sell' && <CrossSellStudio />}
-      {activeTab !== 'overview' && activeTab !== 'templatizer' && activeTab !== 'cross-sell' && (
+      {activeTab === 'missing-blocks' && <MissingBlocksStudio />}
+      {activeTab !== 'overview' && activeTab !== 'templatizer' && activeTab !== 'cross-sell' && activeTab !== 'missing-blocks' && (
         <div className="min-h-[500px] flex flex-col items-center justify-center border border-dashed border-zinc-800 rounded-2xl p-8 text-center bg-zinc-900/30">
           <div className="text-zinc-400 mb-2 font-mono text-sm">Active Tab: {activeTab}</div>
           <h2 className="text-2xl font-bold text-white mb-2">Module Loaded into Shell</h2>
@@ -27,5 +29,6 @@ export default function HomePage() {
     </AppShell>
   );
 }
+
 
 
