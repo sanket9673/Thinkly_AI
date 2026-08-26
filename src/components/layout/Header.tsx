@@ -31,7 +31,7 @@ export const Header: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="text-base font-bold tracking-tight text-white font-sans">VoiceCraft AI</span>
             <Badge variant="success" className="hidden sm:inline-flex text-[9px] font-mono tracking-wider font-extrabold">
-              YC S24
+              Thinkly AI
             </Badge>
           </div>
           <p className="text-[10px] text-zinc-500 hidden md:block">
