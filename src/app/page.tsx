@@ -8,6 +8,8 @@ import { PromptTemplatizer } from '@/components/features/templatizer/PromptTempl
 import { CrossSellStudio } from '@/components/features/cross-sell/CrossSellStudio';
 import { MissingBlocksStudio } from '@/components/features/missing-blocks/MissingBlocksStudio';
 import { EvaluationStudio } from '@/components/features/evaluation/EvaluationStudio';
+import { LiveCallStudio } from '@/components/features/simulator/LiveCallStudio';
+import { SubmissionDocHub } from '@/components/features/submission/SubmissionDocHub';
 
 export default function HomePage() {
   const { activeTab } = useAppState();
@@ -19,7 +21,9 @@ export default function HomePage() {
       {activeTab === 'cross-sell' && <CrossSellStudio />}
       {activeTab === 'missing-blocks' && <MissingBlocksStudio />}
       {activeTab === 'evaluation' && <EvaluationStudio />}
-      {activeTab !== 'overview' && activeTab !== 'templatizer' && activeTab !== 'cross-sell' && activeTab !== 'missing-blocks' && activeTab !== 'evaluation' && (
+      {activeTab === 'simulator' && <LiveCallStudio />}
+      {activeTab === 'pdf-exporter' && <SubmissionDocHub />}
+      {activeTab !== 'overview' && activeTab !== 'templatizer' && activeTab !== 'cross-sell' && activeTab !== 'missing-blocks' && activeTab !== 'evaluation' && activeTab !== 'simulator' && activeTab !== 'pdf-exporter' && (
         <div className="min-h-[500px] flex flex-col items-center justify-center border border-dashed border-zinc-800 rounded-2xl p-8 text-center bg-zinc-900/30">
           <div className="text-zinc-400 mb-2 font-mono text-sm">Active Tab: {activeTab}</div>
           <h2 className="text-2xl font-bold text-white mb-2">Module Loaded into Shell</h2>
