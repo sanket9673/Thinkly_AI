@@ -208,7 +208,7 @@ cd Thinkly_AI
 npm install
 
 # 3. Create local environment file
-cp .env.example .env.local
+cp .env
 ```
 
 ### 2. Launch Development Workbench
@@ -257,16 +257,7 @@ VoiceCraft Engine v2.4 was evaluated across simulated audio test samples and sta
 Create a `.env.local` file in your root directory with the following variables:
 ```env
 # Application Meta
-NEXT_PUBLIC_APP_NAME="VoiceCraft Studio"
-NEXT_PUBLIC_APP_VERSION="2.4.0"
-
-# Optional LLM Engine Keys (for dynamic live judging APIs)
-NEXT_PUBLIC_GEMINI_API_KEY="AIzaSy_your_gemini_api_key_here"
-NEXT_PUBLIC_GROQ_API_KEY="gsk_your_groq_api_key_here"
-
-# Feature Flags
-NEXT_PUBLIC_ENABLE_AUDIO_SYNTHESIS="true"
-NEXT_PUBLIC_DEFAULT_DISFLUENCY_RATE="0.40"
+GROQ_API_KEY=your_groq_api_key_here
 ```
 
 ---
@@ -274,7 +265,7 @@ NEXT_PUBLIC_DEFAULT_DISFLUENCY_RATE="0.40"
 ## 9. Author & Submission Contact
 
 - **Author:** Sanket Kisan Chavhan
-- **Project:** VoiceCraft Studio — Technical Assignment Submission
+- **Project:** VoiceCraft Studio — FDE Intern Assignment Submission
 - **GitHub Repository:** [https://github.com/sanket9673/Thinkly_AI](https://github.com/sanket9673/Thinkly_AI)
 - **Email Contact:** [sanketch9673@gmail.com](mailto:sanketch9673@gmail.com)
 
