@@ -12,7 +12,6 @@ An enterprise-grade voice AI agent workbench, prompt architecture, and live conv
 
 VoiceCraft Studio provides a complete end-to-end sandbox for designing, testing, evaluating, and exporting production-ready voice agent systems. It solves key conversational voice challenges such as unnatural robotic delivery, prompt injection vulnerability, budget objection reframing, barge-in response handling, and latency optimization.
 
-🌐 **GitHub Repository:** [https://github.com/sanket9673/Thinkly_AI](https://github.com/sanket9673/Thinkly_AI)
 🌐 **Deployed Link:** [https://voicecraft-thinkly.netlify.app/](https://voicecraft-thinkly.netlify.app/)
 
 ---
