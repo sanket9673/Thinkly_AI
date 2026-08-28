@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
+        model: "openai/gpt-oss-120b",
         messages: [
           { role: "system", content: systemPrompt },
           ...(conversationHistory || []).map((msg: any) => ({
@@ -40,10 +40,9 @@ export async function POST(req: NextRequest) {
     });
   } catch (error: any) {
     console.error("Groq API Error:", error);
-    // Seamless fallback if API key is invalid/rate-limited
-    return NextResponse.json({
-      reply: "Haan toh... dekhiye Aveon E1 ka real-world range around 400km hai, aur 28 mins mein fast charge ho jata hai. Kya main aaj shaam ko test drive schedule karoon?",
-      isFallback: true,
-    });
+    return NextResponse.json(
+      { error: error.message || "Groq API call failed" },
+      { status: 500 }
+    );
   }
 }
