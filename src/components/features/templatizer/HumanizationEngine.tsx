@@ -5,6 +5,7 @@ import { Play, Pause, RefreshCw, Volume2, HelpCircle } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
+import { PhoneticDictionary } from '@/lib/ttsConfig';
 
 interface Phrase {
   text: string;
@@ -171,6 +172,26 @@ export const HumanizationEngine: React.FC = () => {
       setIsPlaying(false);
     } else {
       // Play
+      // ==========================================
+      // 🎙️ FOUNDER INTERVIEW DEMO: TTS Payload Gen
+      // ==========================================
+      const rawText = getProcessedPhrases().map(p => p.text).join(' ');
+      const phoneticOverrides = PhoneticDictionary[locale as keyof typeof PhoneticDictionary];
+      
+      const mockTtsPayload = {
+        text: rawText,
+        model_id: 'eleven_turbo_v2_5',
+        pronunciation_dictionary_locators: [
+          {
+            dictionary_id: `dict_regional_slang_${locale}`,
+            overrides: phoneticOverrides
+          }
+        ]
+      };
+      console.log(`[TTS Engine] Generating audio for locale: ${locale.toUpperCase()}`);
+      console.log("[TTS Engine] Payload injected with phonetic overrides:", mockTtsPayload);
+      // ==========================================
+
       startTimeRef.current = 0; // Will be set in tick
       setIsPlaying(true);
       animationRef.current = requestAnimationFrame(tick);
