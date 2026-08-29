@@ -25,13 +25,18 @@ export async function POST(req: NextRequest) {
           { role: "user", content: userMessage }
         ],
         temperature: 0.7,
-        max_tokens: 300,
+        max_tokens: 2048,
       }),
     });
 
     const data = await response.json();
     if (!response.ok) {
       throw new Error(data.error?.message || "Groq API call failed");
+    }
+
+    console.log("[Groq API Response Content]:", data.choices[0]?.message?.content);
+    if (!data.choices[0]?.message?.content) {
+      console.log("[Groq API Response Full Data]:", JSON.stringify(data));
     }
 
     return NextResponse.json({
