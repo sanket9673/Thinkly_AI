@@ -28,7 +28,7 @@ const TABS: TabItem[] = [
   { id: 'missing-blocks', label: 'Production Blocks', icon: ShieldAlert, badge: 'Part 2' },
   { id: 'evaluation', label: 'Evaluation & Metrics', icon: BarChart3, badge: 'Part 3' },
   { id: 'simulator', label: 'Live Simulator', icon: Mic, badge: 'Live' },
-  { id: 'pdf-exporter', label: 'Submission Hub', icon: FileCheck2, badge: 'Doc' },
+  { id: 'pdf-exporter', label: 'Documentation', icon: FileCheck2, badge: 'PDF' },
 ];
 
 export const NavigationTabs: React.FC = () => {

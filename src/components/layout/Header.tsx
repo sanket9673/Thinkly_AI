@@ -31,7 +31,7 @@ export const Header: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="text-base font-bold tracking-tight text-white font-sans">VoiceCraft AI</span>
             <Badge variant="success" className="hidden sm:inline-flex text-[9px] font-mono tracking-wider font-extrabold">
-              Thinkly AI
+              Enterprise
             </Badge>
           </div>
           <p className="text-[10px] text-zinc-500 hidden md:block">
@@ -65,7 +65,7 @@ export const Header: React.FC = () => {
       <div className="flex items-center gap-3">
         <Button variant="primary" size="sm" onClick={handleExportTrigger} className="gap-1.5">
           <Sparkles className="h-4 w-4" />
-          <span>Export Submission</span>
+          <span>Export PDF Report</span>
         </Button>
       </div>
     </header>

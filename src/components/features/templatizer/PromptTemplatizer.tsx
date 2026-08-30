@@ -22,7 +22,7 @@ export const PromptTemplatizer: React.FC = () => {
             Universal Prompt Compiler & Humanization Engine
           </h2>
           <p className="text-xs text-zinc-400 mt-1">
-            Assignment Part 1: Solving Problem 1 (Robotic Dialogue Refactoring) & Problem 2 (Liquid Schema Templatizer).
+            Part 1: Solving Problem 1 (Robotic Dialogue Refactoring) & Problem 2 (Liquid Schema Templatizer).
           </p>
         </div>
 

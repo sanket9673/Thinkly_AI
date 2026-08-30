@@ -12,7 +12,7 @@ An enterprise-grade voice AI agent workbench, prompt architecture, and live conv
 
 VoiceCraft Studio provides a complete end-to-end sandbox for designing, testing, evaluating, and exporting production-ready voice agent systems. It solves key conversational voice challenges such as unnatural robotic delivery, prompt injection vulnerability, budget objection reframing, barge-in response handling, and latency optimization.
 
-🌐 **Deployed Link:** [https://voicecraft-thinkly.netlify.app/](https://voicecraft-thinkly.netlify.app/)
+🌐 **Deployed Link:** [https://voicecraft-studio.netlify.app/](https://voicecraft-studio.netlify.app/)
 
 ---
 
@@ -40,7 +40,7 @@ Building production-ready voice AI agents for outbound sales and customer suppor
 - **LLM-as-a-Judge & A/B Evaluation Suite (`EvaluationStudio.tsx`):**
   - `LLMJudgeMatrix.tsx`: Auto-scores tone naturalness (4.8/5.0 target), policy compliance (99.8%), and barge-in response latencies.
   - `ABSplitDashboard.tsx`: Interactive routing sliders, retention funnel bars, and lift badges (+51.6% Conversion, -52.9% Drop-off, -380ms Latency).
-- **Publication-Grade Assignment PDF Submission Hub (`SubmissionDocHub.tsx`):** Clean single-click printable format (`@media print`) rendering Parts 1, 2, and 3 of the engineering assignment, paired with a celebratory canvas-confetti explosion trigger (`PDFExportButton.tsx`).
+- **Publication-Grade PDF Exporter & Report Hub (`SubmissionDocHub.tsx`):** Clean single-click printable format (`@media print`) rendering Parts 1, 2, and 3 of the engineering study, paired with a celebratory canvas-confetti explosion trigger (`PDFExportButton.tsx`).
 
 ---
 
@@ -73,7 +73,7 @@ graph TD;
     subgraph EvaluationSuite ["Evaluation & Metrics Hub"]
         LLMJudge["LLM-as-a-Judge Matrix"]:::eval
         ABSplit["A/B Split Engine"]:::eval
-        PDFDoc["Submission PDF Hub"]:::eval
+        PDFDoc["PDF Report Hub"]:::eval
     end
 
     %% Execution Connections
@@ -159,7 +159,7 @@ voicecraft-studio/
 │   │   │   │   └── LiveCallStudio.tsx       # Real-time outbound voice call simulator UI
 │   │   │   └── submission/
 │   │   │       ├── PDFExportButton.tsx      # Canvas confetti trigger & print utility button
-│   │   │       └── SubmissionDocHub.tsx     # Complete publication-grade submission document
+│   │   │       └── SubmissionDocHub.tsx     # Complete publication-grade technical case document
 │   │   └── layout/
 │   │       ├── AppShell.tsx     # Main header navigation shell with tab switcher
 │   │       └── Sidebar.tsx      # Studio navigation drawer
@@ -185,7 +185,7 @@ voicecraft-studio/
 | :--- | :--- | :--- | :--- |
 | `'simulator'` | `<LiveCallStudio />` | Outbound Phone Call Simulator | Animated VAD Waveform, Call Duration Timer, Interrupt/Barge-in Button, Price Objection Trigger, Live State Machine Sidebar |
 | `'evals'` | `<EvaluationStudio />` | Evaluation Suite & A/B Router | LLM-as-a-Judge Matrix (Tone, Policy, Latency), A/B Traffic Sliders (+51.6% conversion lift), Transcript Judge |
-| `'pdf-exporter'` | `<SubmissionDocHub />` | Printable Assignment Hub | Written solutions for Part 1 (3 Problems), Part 2 (5 Production Blocks), Part 3 (Executive Defense), Print Export Button + Canvas Confetti |
+| `'pdf-exporter'` | `<SubmissionDocHub />` | Printable Report Hub | Written solutions for Part 1 (3 Problems), Part 2 (5 Production Blocks), Part 3 (Executive Defense), Print Export Button + Canvas Confetti |
 
 ### Interactive Trigger Mechanics (`LiveCallStudio.tsx`)
 - **`Start Call` / `Hang Up`:** Initiates simulated web-socket stream, transitions call state from `IDLE` → `DIALING` → `CONNECTED`.
@@ -201,8 +201,8 @@ voicecraft-studio/
 Clone the repository and install project dependencies:
 ```bash
 # 1. Clone the repository
-git clone https://github.com/sanket9673/Thinkly_AI.git
-cd Thinkly_AI
+git clone https://github.com/sanket9673/voicecraft-studio.git
+cd voicecraft-studio
 
 # 2. Install Node.js dependencies
 npm install
@@ -219,7 +219,7 @@ npm run dev
 Open your web browser and navigate to:
 - **Interactive Workbench:** [http://localhost:3000](http://localhost:3000)
 - **Voice Call Simulator:** Select the "Live Call Studio" tab in top navigation.
-- **PDF Submission Hub:** Select "Submission Hub" or click "Export PDF Submission".
+- **PDF Report Hub:** Select "Documentation" or click "Export PDF Report".
 
 ### 3. Production Build & Type Checking
 To test production compilation with Next.js Turbopack and zero type errors:
@@ -262,19 +262,19 @@ GROQ_API_KEY=your_groq_api_key_here
 
 ---
 
-## 9. Author & Submission Contact
+## 9. Author & Project Contact
 
 - **Author:** Sanket Kisan Chavhan
-- **Project:** VoiceCraft Studio — FDE Intern Assignment Submission
-- **GitHub Repository:** [https://github.com/sanket9673/Thinkly_AI](https://github.com/sanket9673/Thinkly_AI)
+- **Project:** VoiceCraft Studio — Voice Agent Engineering Workbench
+- **GitHub Repository:** [https://github.com/sanket9673/voicecraft-studio](https://github.com/sanket9673/voicecraft-studio)
 - **Email Contact:** [sanketch9673@gmail.com](mailto:sanketch9673@gmail.com)
 
 ---
 
 ## 10. Document Print & PDF Export Guide
 
-VoiceCraft Studio includes a built-in, publication-grade document generator (`SubmissionDocHub.tsx`). To generate a clean PDF for assignment submission:
-1. Click the "Export PDF Submission" button located in the top header navigation or inside the Submission Hub tab.
+VoiceCraft Studio includes a built-in, publication-grade document generator (`SubmissionDocHub.tsx`). To generate a clean PDF report:
+1. Click the "Export PDF Report" button located in the top header navigation or inside the Documentation tab.
 2. An interactive canvas-confetti celebration effect will trigger.
 3. The browser native print dialog (`window.print()`) will automatically open.
 4. Select "Save as PDF" in your browser settings. The layout is optimized with Tailwind `@media print` utilities to strip navigation bars, adjust margins, maintain page breaks cleanly, and output crisp publication-grade text.

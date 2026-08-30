@@ -50,7 +50,7 @@ export function Part3SubmissionReader() {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-semibold">
-              Assignment Part 3 Verified
+              Part 3 Verified
             </span>
             <span className="text-xs text-zinc-500 font-mono">Executive Summary Reader</span>
           </div>

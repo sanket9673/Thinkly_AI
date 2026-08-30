@@ -18,7 +18,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
       <footer className="border-t border-zinc-900 bg-zinc-950/80 py-4 text-xs text-zinc-500">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
           <div>
-            <span>VoiceCraft Studio v2.4</span> • <span className="text-zinc-400">Forward Deployed AI Engineering Assessment</span>
+            <span>VoiceCraft Studio v2.4</span> • <span className="text-zinc-400">Voice AI Engineering Studio</span>
           </div>
           <div className="flex items-center gap-4 text-zinc-400">
             <span>Model Config: <strong className="text-violet-400">{selectedModel}</strong></span>

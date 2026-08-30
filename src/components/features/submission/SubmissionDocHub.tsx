@@ -16,7 +16,7 @@ export const SubmissionDocHub: React.FC = () => {
             <FileText className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider">Intern Technical Assignment Exporter</h3>
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider">Technical Case Exporter</h3>
             <p className="text-xs text-zinc-400 mt-0.5">
               Review and export the consolidated technical assignment document. Confetti particles will trigger upon PDF generation.
             </p>
@@ -45,14 +45,14 @@ export const SubmissionDocHub: React.FC = () => {
               <div className="text-[10px] font-mono text-zinc-500 text-left sm:text-right">
                 <div>DATE: August 2026</div>
                 <div>VERSION: v2.4 (Production)</div>
-                <div>TARGET: FDE Intern Evaluation</div>
+                <div>TARGET: Technical Evaluation</div>
               </div>
             </div>
 
             <div className="p-4 bg-zinc-950/60 print:bg-zinc-100 rounded-lg border border-zinc-850 print:border-zinc-300 flex items-center gap-3 text-xs">
               <UserCheck className="h-5 w-5 text-emerald-400 shrink-0" />
               <div>
-                <strong className="text-white print:text-zinc-900">Intern Candidate Portfolio</strong>
+                <strong className="text-white print:text-zinc-900">Technical Case Portfolio</strong>
                 <p className="text-zinc-400 print:text-zinc-600 mt-0.5">
                   Solving Voice Agent Prompt Humanization, Dynamic Catalog cross-selling matrices, and Production Guardrails.
                 </p>
@@ -189,8 +189,8 @@ export const SubmissionDocHub: React.FC = () => {
 
           {/* Footer Signature */}
           <div className="border-t border-zinc-850 print:border-zinc-400 pt-6 flex flex-col sm:flex-row sm:items-center justify-between text-[10px] text-zinc-500">
-            <span>VoiceCraft Studio Technical Case Assignment</span>
-            <span className="mt-1 sm:mt-0">Page 1 of 1 • Generated via Antigravity FDE Studio</span>
+            <span>VoiceCraft Studio Technical Case Study</span>
+            <span className="mt-1 sm:mt-0">Page 1 of 1 • Generated via Antigravity VoiceCraft Studio</span>
           </div>
 
         </CardContent>

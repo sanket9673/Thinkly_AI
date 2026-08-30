@@ -21,7 +21,7 @@ export const MissingBlocksStudio: React.FC = () => {
             Production Guardrails & Missing Blocks Inspector
           </h2>
           <p className="text-xs text-zinc-400 mt-1">
-            Assignment Part 2: Reviewing the 5 critical missing block categories required for production-ready voice calls.
+            Part 2: Reviewing the 5 critical missing block categories required for production-ready voice calls.
           </p>
         </div>
 

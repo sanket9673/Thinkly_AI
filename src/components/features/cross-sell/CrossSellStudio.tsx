@@ -81,7 +81,7 @@ export const CrossSellStudio: React.FC = () => {
             Multi-Product Cross-Selling Studio
           </h2>
           <p className="text-xs text-zinc-400 mt-1">
-            Assignment Part 1: Solving Problem 3 (Objection Classification, Reframing Constraints, & Catalog Pivots).
+            Part 1: Solving Problem 3 (Objection Classification, Reframing Constraints, & Catalog Pivots).
           </p>
         </div>
 

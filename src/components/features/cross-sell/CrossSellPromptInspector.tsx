@@ -76,7 +76,7 @@ export const CrossSellPromptInspector: React.FC = () => {
             Cross-Sell Prompt & Logic compiler
           </h3>
           <p className="text-xs text-zinc-400">
-            View the exact production-ready prompt directives solving Assignment Problem 3.
+            View the exact production-ready prompt directives solving Problem 3.
           </p>
         </div>
         <Button

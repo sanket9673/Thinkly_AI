@@ -50,11 +50,11 @@ export const OverviewHub: React.FC = () => {
         <div className="relative z-10 space-y-4 max-w-3xl">
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
             <Sparkles className="h-3.5 w-3.5" />
-            <span>Forward Deployed Engineer Intern Task</span>
+            <span>Voice Agent Engineering Workbench</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-zinc-100 via-zinc-200 to-zinc-450">
-            Forward Deployed Engineer Task — Voice Agent Engineering Workbench
+            Voice AI Engineering Studio — Voice Agent Workbench
           </h1>
 
           <p className="text-sm text-zinc-400 leading-relaxed max-w-2xl">
@@ -218,7 +218,7 @@ export const OverviewHub: React.FC = () => {
                 <div className="space-y-2 text-[10px] text-zinc-500 font-mono">
                   <div className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-amber-400" /> A/B Split conversion gauges</div>
                   <div className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-amber-400" /> Token Highlight call inspector</div>
-                  <div className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-amber-400" /> Executive Submission Reader</div>
+                  <div className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-amber-400" /> Executive Summary Reader</div>
                 </div>
               </div>
               <Button variant="secondary" size="sm" className="mt-6 w-full text-xs font-semibold font-mono" onClick={() => setActiveTab('evaluation')}>
